@@ -1,9 +1,11 @@
 package com.example.max.happypool;
 
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
+
 import java.util.Map;
 
-public class GameOver extends PlayObject {
+public class GameOver extends PlayObject implements Constants {
 
     Boolean canUpdate = false;
     int centerX, centerY, ddx, ddy, bgWidth, bgHeight;
@@ -11,11 +13,13 @@ public class GameOver extends PlayObject {
     int dy;
     int speed = 30;
     boolean canDownSize = false;
+    Handler handler;
 //    boolean canChangeSize = true;
 
-    GameOver(Map<String, Drawable> hashMapImg, Map<String, Integer> hashMapSize, int x, int y) {
+    GameOver(Map<String, Drawable> hashMapImg, Map<String, Integer> hashMapSize, Handler handler, int x, int y) {
         super(hashMapImg, hashMapSize, x, y);
         curentImg = hashMapImg.get("game_overImg");
+        this.handler = handler;
         rect.set(x, y, x + 1, y + 1);
         bgWidth = hashMapSize.get("mCanvasWidth");
         bgHeight = hashMapSize.get("mCanvasHeight");
@@ -34,6 +38,7 @@ public class GameOver extends PlayObject {
             if(canDownSize){
                 downSize();
             } else upSize();
+            handler.sendEmptyMessage(STATE_LOSE);
         }
     }
     public void upSize() {

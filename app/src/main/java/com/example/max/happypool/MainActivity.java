@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import javax.security.auth.login.LoginException;
@@ -35,7 +36,13 @@ public class MainActivity extends Activity {
 //        myView=  findViewById(R.id.myview);
 //        myView = new MyView(context);
         myThread=myView.getThread();
-        tvt1 = findViewById(R.id.tv1);
+//        tvt1 = findViewById(R.id.tv1);
+//        tvt1 = new TextView(this);
+//        tvt1.setText("dfsfsdfsfs dfsfs");
 //        myView.setTextView(tvt1);
+        RelativeLayout mLayout = (RelativeLayout) findViewById(R.id.relLay);
+        tvt1 = new TextView(this);
+        tvt1.setText("Jooopppa!!!");
+        mLayout.addView(tvt1);
     }
 }

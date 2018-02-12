@@ -10,31 +10,38 @@ package com.example.max.happypool; //сохранение текущ состо�
         import android.view.SurfaceView;
         import android.view.SurfaceHolder;
 
+        import android.widget.RelativeLayout;
         import android.widget.TextView;
 
 
-public class MyView extends SurfaceView implements SurfaceHolder.Callback {
+public class MyView extends SurfaceView implements SurfaceHolder.Callback, Constants {
 
     MyThread thread ;
     public TextView tvt1;
+    private String str;
 
     MyView(Context context) {
         super(context);
         SurfaceHolder holder = getHolder();
         holder.addCallback(this);
 
-        tvt1 = findViewById(R.id.tv1);
+
+
+//        tvt1 = findViewById(mLayout.idtv1);
+//        tvt1 = (TextView) findViewById(R.id.tv1);
+//        tvt1 = new TextView(context);
 
         Log.w("Target", "MyView: thread = new MyThread(holder, context...");
         thread = new MyThread(this, holder, context, new Handler() {
             @Override
             public void handleMessage(Message m) {
-//                if(m.what==1){
-//                    str = "countLive= "+m.getData().getInt("countLive");
-//                    tvt1.setText(str);
-//                }
+                if(m.what==STATE_LOSE){
+//                    tvt1.setText("Xtttt");//R.string.mode_lose
+//                    tvt1.setVisibility();
+                }
             }
         });
+//        tvt1.setText("Fgfhd dhdf");
         setFocusable(true);
     }
 

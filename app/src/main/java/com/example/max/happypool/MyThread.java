@@ -1,13 +1,10 @@
-package com.example.max.happypool;
+package com.example.max.happypool;// 3 стажа, сохранение, возврат после победы и поражения, звук.
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.os.Message;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.widget.TextView;
 import android.os.Handler;
@@ -30,7 +27,7 @@ public class MyThread extends Thread implements Constants {
     Splash splash;
     Heart heart;
     Kamish kamish;
-    GameOver gameOver;
+    GameOver mGameOver;
     Target target;
     Handler handler;
     TextView tv;
@@ -51,26 +48,21 @@ public class MyThread extends Thread implements Constants {
     private Map<String, Drawable> hashMapImg;
     private Map<String, Integer> hashMapSize;
     Bitmap backgroundImg;
-    Background background;
+//    Background background;
     int timeUnderWater;
 
-    public MyThread(MyView myView, SurfaceHolder surfaceHolder, Context context, Handler handler) {
+    MyThread(MyView myView, SurfaceHolder surfaceHolder, Context context, Handler handler) {
 //        Log.i(TAG, "Begin Constructor MyThread");
         this.myView = myView;
         this.surfaceHolder = surfaceHolder;
         this.handler = handler;
         this.context = context;
 
-        makeDrawable = new MakeDrawable(context);
-
-        hashMapImg = makeDrawable.getHashMapImg();
-        hashMapSize = makeDrawable.getHashMapSize();
-        makeStage1 = new MakeStage1(hashMapImg, hashMapSize, this);
+        makeDrawable = new MakeDrawable(context, this);
+        makeStage1 = new MakeStage1(hashMapImg, hashMapSize, this, handler);
         lastKuvshinka = arrayKuvshinka.get(0);
 
         inputOutput = new InputOutput(myView, player, this);
-        background = new Background(hashMapSize, context);
-        backgroundImg = background.getBgImg();
         setState(STATE_RUNING);
     }
 
@@ -79,7 +71,7 @@ public class MyThread extends Thread implements Constants {
         hippo = (Hippo) gameObject.get("hippo");
         splash = (Splash) gameObject.get("splash");
         kamish = (Kamish) gameObject.get("kamish");
-        gameOver = (GameOver) gameObject.get("gameOver");
+        mGameOver = (GameOver) gameObject.get("mGameOver");
         target = (Target) gameObject.get("target");
         win = (Win) gameObject.get("win");
     }
@@ -87,6 +79,11 @@ public class MyThread extends Thread implements Constants {
     public void setArray(ArrayList<Kuvshinka> arrayKuvshinka, ArrayList<Heart> arrayHeart){
         this.arrayKuvshinka = arrayKuvshinka;
         this.arrayHeart = arrayHeart;
+    }
+    public void setHash(Map<String, Drawable> hashMapImg, Map<String, Integer> hashMapSize, Bitmap backgroundImg){
+        this.hashMapImg = hashMapImg;
+        this.hashMapSize = hashMapSize;
+        this.backgroundImg = backgroundImg;
     }
     public void setRunning(boolean b) {
         running = b;
@@ -127,7 +124,8 @@ public class MyThread extends Thread implements Constants {
         } else if (curentState == STATE_LOSE) {
             player.setState(STATE_LOSE);
             hippo.setState(STATE_PAUSE);
-            gameOver();
+            mTimer(2000);
+
 
         } else if (curentState == STATE_WIN) {
             player.setState(STATE_WIN);
@@ -161,9 +159,9 @@ public class MyThread extends Thread implements Constants {
     }
 
     private void gameOver() {
-        now = System.currentTimeMillis();
-        gameOver.setCanUpdate(true);
-//        canDrawGameOver = true;
+//        now = System.currentTimeMillis();
+        mGameOver.setCanUpdate(true);
+        canDrawGameOver = true;
     }
 
     private void win() {
@@ -177,6 +175,21 @@ public class MyThread extends Thread implements Constants {
 
 //            kamishImg = Bitmap.createScaledBitmap(kamishImg, width, height, true);
         }
+    }
+
+    public void mTimer(final long delay){
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    Thread.sleep(delay);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if(curentState == STATE_LOSE){
+                    gameOver();
+                }
+            }
+        }).start();
     }
 
     public void pause() {
@@ -208,7 +221,7 @@ public class MyThread extends Thread implements Constants {
     private void updatePhysics() {
         player.updatePhysics();
         hippo.updatePhysics();
-        gameOver.updatePhysics();
+        mGameOver.updatePhysics();
         win.updatePhysics();
 
         if (curentState == STATE_BULK) {
@@ -241,7 +254,6 @@ public class MyThread extends Thread implements Constants {
             h.getCurentImg().setBounds(h.getRect());
             h.getCurentImg().draw(canvas);
         }
-        //TODO background into obj
 
         hippo.getCurentImg().setBounds(hippo.getRect());
         hippo.getCurentImg().draw(canvas);
@@ -263,22 +275,11 @@ public class MyThread extends Thread implements Constants {
             win.getCurentImg().draw(canvas);
         }
 
-        if (curentState == STATE_LOSE && (System.currentTimeMillis()>now + timeUnderWater)){
-            gameOver.getCurentImg().setBounds(gameOver.getRect());
-            gameOver.getCurentImg().draw(canvas);
+        if (curentState == STATE_LOSE && canDrawGameOver){
+            mGameOver.getCurentImg().setBounds(mGameOver.getRect());
+            mGameOver.getCurentImg().draw(canvas);
         }
     }
-
-
-
-//    public boolean doKeyUp(int keyCode, KeyEvent msg) {
-//        return true;
-//    }
-//
-//    public boolean doKeyDown(int keyCode, KeyEvent msg) {
-//        return true;
-//    }
-
 
 }
 

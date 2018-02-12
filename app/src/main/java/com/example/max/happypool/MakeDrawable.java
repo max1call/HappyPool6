@@ -24,7 +24,7 @@ class MakeDrawable {
     Map<String, Drawable> hashMapImg;
     Map<String, Integer> hashMapSize;
 
-    MakeDrawable(Context context){
+    MakeDrawable(Context context, MyThread myThread){
         this.context = context;
         canResize = true;
         initImg();
@@ -32,9 +32,11 @@ class MakeDrawable {
         calcullateScale();
         resizeImg();
         putToHash();
+        myThread.setHash(hashMapImg, hashMapSize, backgroundImg);
     }
 
     private void initImg() {
+        backgroundImg = BitmapFactory.decodeResource(context.getResources(), R.drawable.background3);
         kamishImg = context.getResources().getDrawable(R.drawable.kamish);
         game_overImg = context.getResources().getDrawable(R.drawable.game_over);
         winImg = context.getResources().getDrawable(R.drawable.win);
@@ -83,6 +85,7 @@ class MakeDrawable {
     }
     private void resizeImg(){
         if (canResize) {
+            backgroundImg = Bitmap.createScaledBitmap(backgroundImg, mCanvasWidth, mCanvasHeight, true);
             kamishWidth = (int) (kamishWidth/coefficientScale);
             kamishHeight = (int) (kamishHeight/coefficientScale);
             idleFrogWidth = (int) (idleFrogWidth/coefficientScale);
@@ -137,10 +140,10 @@ class MakeDrawable {
         hashMapSize.put("targetWidth",targetWidth);
         hashMapSize.put("targetHeight",targetHeight);
     }
-    protected Map<String, Integer> getHashMapSize(){
-        return hashMapSize;
-    }
-    protected Map<String, Drawable> getHashMapImg(){
-        return hashMapImg;
-    }
+//    protected Map<String, Integer> getHashMapSize(){
+//        return hashMapSize;
+//    }
+//    protected Map<String, Drawable> getHashMapImg(){
+//        return hashMapImg;
+//    }
 }

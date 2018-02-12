@@ -39,7 +39,7 @@ public class Player extends PlayObject implements Constants {
         }
         else if (curentState == STATE_ONHIPPO) {
             curentImg = hashMapImg.get("idleFrogImg");
-
+            rect.set(rect.left, rect.top, rect.left + hashMapSize.get("idleFrogWidth"), rect.top + hashMapSize.get("idleFrogHeight"));
         }
         else if (curentState == STATE_BULK) {
 //            myThread.setState(STATE_BULK);
