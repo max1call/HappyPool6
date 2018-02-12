@@ -50,6 +50,7 @@ public class MyThread extends Thread implements Constants {
     Bitmap backgroundImg;
 //    Background background;
     int timeUnderWater;
+    BasicData basicData;
 
     MyThread(MyView myView, SurfaceHolder surfaceHolder, Context context, Handler handler) {
 //        Log.i(TAG, "Begin Constructor MyThread");
@@ -59,6 +60,7 @@ public class MyThread extends Thread implements Constants {
         this.context = context;
 
         makeDrawable = new MakeDrawable(context, this);
+        basicData = new BasicData(hashMapImg, hashMapSize, this);
         makeStage1 = new MakeStage1(hashMapImg, hashMapSize, this, handler);
         lastKuvshinka = arrayKuvshinka.get(0);
 
@@ -99,17 +101,17 @@ public class MyThread extends Thread implements Constants {
         curentState = state;
 //        Log.i(TAG, "Begin setState");
 
-        if (curentState == STATE_RUNING) {
+        if(curentState == STATE_RUNING) {
 //            player.setState(STATE_ONKUVSHINKA);
 //            hippo.setState(STATE_MOVE);
 //            paint.setColor(Color.BLACK);
             running = true;
 
-        } else if (curentState == STATE_PAUSE) {
+        }else if (curentState == STATE_PAUSE) {
             str = context.getResources().getText(R.string.mode_pause);
             running = false;
 
-        } else if (curentState == STATE_BULK) {
+        }else if (curentState == STATE_BULK) {
             now = System.currentTimeMillis();
             splash.setLocatoin();
             countLive--;
@@ -121,13 +123,22 @@ public class MyThread extends Thread implements Constants {
                 setState(STATE_LOSE);
             }
 
-        } else if (curentState == STATE_LOSE) {
+        }else if (curentState == STAGE_1) {
+
+
+        }else if (curentState == STAGE_2) {
+
+
+        }else if (curentState == STAGE_3) {
+
+
+        }else if (curentState == STATE_LOSE) {
             player.setState(STATE_LOSE);
             hippo.setState(STATE_PAUSE);
             mTimer(2000);
 
 
-        } else if (curentState == STATE_WIN) {
+        }else if (curentState == STATE_WIN) {
             player.setState(STATE_WIN);
             hippo.setState(STATE_PAUSE);
             win();
@@ -152,7 +163,20 @@ public class MyThread extends Thread implements Constants {
             contains = true;
         }
         else if (target.getRect().contains(rectFrog.centerX(), rectFrog.centerY())){
-            setState(STATE_WIN);
+            switch (curentState){
+                case STAGE_1:{
+                    setState(STAGE_2);
+                    break;
+                }
+                case STAGE_2:{
+                    setState(STAGE_3);
+                    break;
+                }
+                case STAGE_3:{
+                    setState(STATE_WIN);
+                    break;
+                }
+            }
             contains = true;
         }
         if (!contains) setState(STATE_BULK);

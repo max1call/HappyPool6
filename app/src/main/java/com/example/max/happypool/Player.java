@@ -15,15 +15,16 @@ public class Player extends PlayObject implements Constants {
     MyThread myThread;
     Hippo hippo;
 
-    Player(Map<String, Drawable> hashMapImg, Map<String, Integer> hashMapSize, int x, int y, int speedFly, MyThread myThread, Hippo hippo) {
-        super(hashMapImg, hashMapSize, x, y);
+    Player(Map<String, Drawable> hashMapImg, Map<String, Integer> hashMapSize, int speedFly, MyThread myThread, Hippo hippo) {
+        super(hashMapImg, hashMapSize, 0, 0);
         this.speedFly=speedFly;
         this.myThread=myThread;
         this.hippo=hippo;
         lengthJump = hashMapSize.get("lengthJump");
         heading = 0;
 //        this.speedFly = 10;
-        rect.set(x, y, x + hashMapSize.get("idleFrogWidth"), y + hashMapSize.get("idleFrogHeight"));
+//        rect.set(x, y, x + hashMapSize.get("idleFrogWidth"), y + hashMapSize.get("idleFrogHeight"));
+        rect.set(0, 0, hashMapSize.get("idleFrogWidth"), hashMapSize.get("idleFrogHeight"));
         setState(STATE_ONKUVSHINKA);
     }
     public void setState(int curentState) {/////////////////******************////////////////////////////

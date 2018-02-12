@@ -18,10 +18,7 @@ class MakeStage1 {
     private Player player;
     private Splash splash;
     private Target target;
-    private Kamish kamish;
-    private Win win;
-    private GameOver gameOver;
-    private int xPlayer, yPlayer;
+
     private int xHippo, yHippo;
 
     MakeStage1(Map<String, Drawable> hashMapImg, Map<String, Integer> hashMapSize, MyThread myThread, Handler handler) {
@@ -29,29 +26,11 @@ class MakeStage1 {
         this.hashMapSize = hashMapSize;
         arrayKuvshinka = new ArrayList<>();
         arrayHeart = new ArrayList<>();
-
-        int lengthJump = hashMapSize.get("lengthJump");
-        int speedFly= lengthJump/10;
-        int speedHippo = lengthJump/70;
-        int timeUnderWater=2000;
-        int k = lengthJump/20;
-        newHeart(k, k);
-        newHeart(2*k+hashMapSize.get("heartWidth"), k);
-        newHeart(3*k+2*hashMapSize.get("heartWidth"), k);
-
         makeKuvshinks();
         myThread.setArray(arrayKuvshinka, arrayHeart);
         hippo = new Hippo(hashMapImg, hashMapSize, speedHippo, xHippo, yHippo);
-        player = new Player(hashMapImg, hashMapSize , xPlayer, yPlayer, speedFly, myThread, hippo);
-
-        splash = new Splash(hashMapImg, hashMapSize , 0, 0, player);
-        kamish = new Kamish(hashMapImg, hashMapSize , 0, hashMapSize.get("mCanvasHeight")-hashMapSize.get("kamishHeight"));
-
-        gameOver = new GameOver(hashMapImg, hashMapSize, handler, hashMapSize.get("mCanvasWidth")/2, hashMapSize.get("mCanvasHeight")/2);
-        win = new Win(hashMapImg, hashMapSize , hashMapSize.get("mCanvasWidth")/2, hashMapSize.get("mCanvasHeight")/2);
         putToHash();
         myThread.ObjFromHash(gameObject);
-        myThread.setTimeUnderWater(timeUnderWater);
     }
     private void makeKuvshinks(){
         int kHeading;
@@ -86,10 +65,8 @@ class MakeStage1 {
         radians = 2 * Math.PI * kHeading / 360;
         xKuvshinka += (int) (lengthJump*Math.sin(radians));
         yKuvshinka -= (int) (lengthJump*Math.cos(radians));
-
         target = new Target(hashMapImg, hashMapSize , xKuvshinka, yKuvshinka);
     }
-
     private void putToHash() {
         gameObject = new HashMap<>();
         gameObject.put("hippo", hippo);
@@ -100,15 +77,12 @@ class MakeStage1 {
         gameObject.put("win", win);
         gameObject.put("target", target);
     }
-
     private void newKuvshinka(int x, int y) {
         Kuvshinka kuvshinka = new Kuvshinka(hashMapImg, hashMapSize , x, y);
         arrayKuvshinka.add(kuvshinka);
     }
+    public void newStage(){
 
-    private void newHeart(int x, int y) {
-        Heart heart = new Heart(hashMapImg, hashMapSize , x, y);
-        arrayHeart.add(heart);
     }
 
 }

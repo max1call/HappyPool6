@@ -9,4 +9,7 @@ public interface Constants {
     public static final int STATE_RUNING = 6;
     public static final int STATE_PAUSE = 7;
     public static final int STATE_ONHIPPO = 8;
+    public static final int STAGE_1 = 9;
+    public static final int STAGE_2 = 10;
+    public static final int STAGE_3 = 11;
 }
