@@ -88,7 +88,7 @@ class MakeStage2 extends MakeStage {
 //        newHippo(xHippo, yHippo);
         setPositiovHippo(0, xHippo, yHippo);
 
-        kHeading = 120;
+        kHeading = 110;
         radians = 2 * Math.PI * kHeading / 360;
         xKuvshinka += (int) (lengthJump*Math.sin(radians));
         yKuvshinka -= (int) (lengthJump*Math.cos(radians));

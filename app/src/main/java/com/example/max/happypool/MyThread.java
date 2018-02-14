@@ -125,7 +125,10 @@ public class MyThread extends Thread implements Constants {
 
         }else if (curentState == STATE_WIN) {
             player.setState(STATE_WIN);
-            hippo.setState(STATE_PAUSE);
+            for(Hippo h : arrayHippo) {
+                h.setState(STATE_PAUSE);
+            }
+//            hippo.setState(STATE_PAUSE);
             win();
         }
     }
@@ -139,13 +142,15 @@ public class MyThread extends Thread implements Constants {
         }else if (stage == STAGE_2) {
             makeStage2 = new MakeStage2(hashMapImg, hashMapSize, this, handler);
 //            makeStage2.setArray(arrayKuvshinka, arrayHeart, arrayHippo);
-            player.setCurentKufsh(arrayKuvshinka.get(0));
+            lastKuvshinka = arrayKuvshinka.get(0);
+            player.setCurentKufsh(lastKuvshinka);
             player.setState(Constants.STATE_ONKUVSHINKA);
 
         }else if (stage == STAGE_3) {
             makeStage3 = new MakeStage3(hashMapImg, hashMapSize, this, handler);
 //            makeStage3.setArray(arrayKuvshinka, arrayHeart, arrayHippo);
-            player.setCurentKufsh(arrayKuvshinka.get(0));
+            lastKuvshinka = arrayKuvshinka.get(0);
+            player.setCurentKufsh(lastKuvshinka);
             player.setState(Constants.STATE_ONKUVSHINKA);
         }
     }
@@ -193,7 +198,7 @@ public class MyThread extends Thread implements Constants {
                     break;
                 }
                 case STAGE_3:{
-                    setStage(STATE_WIN);
+                    setState(STATE_WIN);
                     break;
                 }
             }
