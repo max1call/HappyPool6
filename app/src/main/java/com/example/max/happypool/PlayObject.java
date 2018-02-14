@@ -34,5 +34,8 @@ public class PlayObject implements Constants{
         return rect;
     }
 
+    public void setPoisition(int x, int y) {
+        rect.offset(x-rect.left, y-rect.top);
+    }
 }
 

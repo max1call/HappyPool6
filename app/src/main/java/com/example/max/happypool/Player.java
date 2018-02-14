@@ -65,14 +65,14 @@ public class Player extends PlayObject implements Constants {
     public void setTouchDown(float x, float y){
         if (rect.contains((int)x, (int)y) && (curentState == STATE_ONKUVSHINKA || curentState == STATE_ONHIPPO)) {
             readXY = true;
-            x1 = rect.centerX();
-            y1 = rect.centerY();
 
             Log.i("fly", "xStartJump = "+x1+ "; yStartJump = "+y1);
         }
     }
     public void setHeading(float x, float y){
         if (readXY) {
+            x1 = rect.centerX();
+            y1 = rect.centerY();
             radians = Math.acos((y-y1)/Math.sqrt((x-x1)*(x-x1)+(y-y1)*(y-y1)));
             if (x>x1)radians=(-1)*radians;
             heading = (int) (radians*360/(2 * Math.PI));
@@ -95,18 +95,14 @@ public class Player extends PlayObject implements Constants {
             myThread.checkLocation(rect, x1, y1);
         }
         else if (curentState == STATE_ONHIPPO) {
-
-                rect.offset(curentHippo.getRect().centerX() - rect.centerX(), curentHippo.getRect().centerY() - rect.centerY());
-
+            rect.offset(curentHippo.getRect().centerX() - rect.centerX(),
+                        curentHippo.getRect().centerY() - rect.centerY());
         }
 
         else if (curentState == STATE_LOSE) {
-
         }
     }
-//    protected void setPositionFrog(Rect r){
-//        rect.set(r);
-//    }
+
     protected void setCurentHippo(Hippo h){
             curentHippo = h;
     }

@@ -61,6 +61,7 @@ public class MyThread extends Thread implements Constants {
         makeDrawable = new MakeDrawable(context, this);
         inputOutput = new InputOutput(myView, this);
         lengthJump = hashMapSize.get("lengthJump");
+        setRunning(true);
         setState(STATE_RUNING);
         setStage(STAGE_1);
     }
@@ -96,7 +97,7 @@ public class MyThread extends Thread implements Constants {
         curentState = state;
 
         if(curentState == STATE_RUNING) {
-            running = true;
+//            running = true;
 
         }else if (curentState == STATE_PAUSE) {
 //            str = context.getResources().getText(R.string.mode_pause);
@@ -137,10 +138,13 @@ public class MyThread extends Thread implements Constants {
 
         }else if (stage == STAGE_2) {
             makeStage2 = new MakeStage2(hashMapImg, hashMapSize, this, handler);
+//            makeStage2.setArray(arrayKuvshinka, arrayHeart, arrayHippo);
             player.setCurentKufsh(arrayKuvshinka.get(0));
             player.setState(Constants.STATE_ONKUVSHINKA);
 
         }else if (stage == STAGE_3) {
+            makeStage3 = new MakeStage3(hashMapImg, hashMapSize, this, handler);
+//            makeStage3.setArray(arrayKuvshinka, arrayHeart, arrayHippo);
             player.setCurentKufsh(arrayKuvshinka.get(0));
             player.setState(Constants.STATE_ONKUVSHINKA);
         }
@@ -178,7 +182,7 @@ public class MyThread extends Thread implements Constants {
                 }
             }
         }
-        if (target.getRect().intersect(rectFrog) && !contains){
+        if (target.getRect().contains(rectFrog.centerX(), rectFrog.centerY()) && !contains){
             switch (stage){
                 case STAGE_1:{
                     setStage(STAGE_2);
@@ -209,7 +213,11 @@ public class MyThread extends Thread implements Constants {
         win.setCanUpdate(true);
 //        canDrawGameOver = true;
     }
-
+    public void getArray(ArrayList<Kuvshinka> arrayKuvshink, ArrayList<Heart> arrayHear, ArrayList<Hippo>arrayHipp){
+        arrayKuvshink = this.arrayKuvshinka;
+        arrayHear = this.arrayHeart;
+        arrayHipp = this.arrayHippo;
+    }
     public void setSurfaceSize(int width, int height) {
         synchronized (surfaceHolder) {
 
@@ -271,7 +279,7 @@ public class MyThread extends Thread implements Constants {
         win.updatePhysics();
 
         if (curentState == STATE_BULK) {
-            Rect rect = new Rect(player.getRect());
+//            Rect rect = new Rect(player.getRect());
             if(System.currentTimeMillis()>now + timeUnderWater) {
 //                rect.offset(lastKuvshinka.getRect().centerX() - rect.centerX(), lastKuvshinka.getRect().centerY() - rect.centerY());
                 player.setCurentKufsh(lastKuvshinka);
@@ -339,6 +347,22 @@ public class MyThread extends Thread implements Constants {
 
     public void setTouchUp(float x, float y) {
         player.setTouchUp(x, y);
+    }
+
+    public ArrayList<Kuvshinka> getArrayKuvshinka() {
+        return arrayKuvshinka;
+    }
+
+    public ArrayList<Heart> getArrayHeart() {
+        return arrayHeart;
+    }
+
+    public ArrayList<Hippo> getArrayHippo() {
+        return arrayHippo;
+    }
+
+    public Target getTarget() {
+        return target;
     }
 }
 

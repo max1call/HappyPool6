@@ -27,6 +27,8 @@ class MakeStage2 extends MakeStage {
 
     MakeStage2(Map<String, Drawable> hashMapImg, Map<String, Integer> hashMapSize, MyThread myThread, Handler handler) {
         super(hashMapImg, hashMapSize, myThread, handler);
+        getArray();
+        makeKuvshinks();
 //        this.hashMapImg = hashMapImg;
 //        this.hashMapSize = hashMapSize;
 //        arrayKuvshinka = new ArrayList<>();
@@ -55,26 +57,38 @@ class MakeStage2 extends MakeStage {
 //        myThread.ObjFromHash(gameObject);
 //        myThread.setTimeUnderWater(timeUnderWater);
     }
-    @Override
+//    @Override
     void makeKuvshinks(){
         int kHeading;
         double radians;
         int lengthJump = hashMapSize.get("lengthJump");
 
         int xKuvshinka = (int) (0.3*hashMapSize.get("kuvshinkaWidth"));
-        int yKuvshinka = (hashMapSize.get("mCanvasHeight") - 3*hashMapSize.get("kuvshinkaHeight"));
-        newKuvshinka(xKuvshinka, yKuvshinka);
+        int yKuvshinka =  3*hashMapSize.get("kuvshinkaHeight");
+//        newKuvshinka(xKuvshinka, yKuvshinka);
+        setPositiovKuvsh(0, xKuvshinka, yKuvshinka);
 
-        xPlayer = xKuvshinka+(hashMapSize.get("kuvshinkaWidth")-hashMapSize.get("idleFrogWidth"))/2;
-        yPlayer = yKuvshinka+(hashMapSize.get("kuvshinkaHeight")-hashMapSize.get("idleFrogHeight"))/2;
+//        xPlayer = xKuvshinka+(hashMapSize.get("kuvshinkaWidth")-hashMapSize.get("idleFrogWidth"))/2;
+//        yPlayer = yKuvshinka+(hashMapSize.get("kuvshinkaHeight")-hashMapSize.get("idleFrogHeight"))/2;
 
-        kHeading = 35;
+        kHeading = 165;
         radians = 2 * Math.PI * kHeading / 360;
         xKuvshinka += (int) (lengthJump*Math.sin(radians));
         yKuvshinka -= (int) (lengthJump*Math.cos(radians));
-        newKuvshinka(xKuvshinka, yKuvshinka);
+//        newKuvshinka(xKuvshinka, yKuvshinka);
+        setPositiovKuvsh(1, xKuvshinka, yKuvshinka);
+        arrayKuvshinka.remove(2);
 
-        kHeading = 115;
+        kHeading = 60;
+        radians = 2 * Math.PI * kHeading / 360;
+        xKuvshinka += (int) (lengthJump*Math.sin(radians));
+        yKuvshinka -= (int) (lengthJump*Math.cos(radians));
+        xHippo = xKuvshinka;
+        yHippo = yKuvshinka;
+//        newHippo(xHippo, yHippo);
+        setPositiovHippo(0, xHippo, yHippo);
+
+        kHeading = 120;
         radians = 2 * Math.PI * kHeading / 360;
         xKuvshinka += (int) (lengthJump*Math.sin(radians));
         yKuvshinka -= (int) (lengthJump*Math.cos(radians));
@@ -82,20 +96,12 @@ class MakeStage2 extends MakeStage {
         yHippo = yKuvshinka;
         newHippo(xHippo, yHippo);
 
-        kHeading = 90;
+        kHeading = 60;
         radians = 2 * Math.PI * kHeading / 360;
         xKuvshinka += (int) (lengthJump*Math.sin(radians));
         yKuvshinka -= (int) (lengthJump*Math.cos(radians));
-        xHippo = xKuvshinka;
-        yHippo = yKuvshinka;
-        newHippo(xHippo, yHippo);
-
-        kHeading = 35;
-        radians = 2 * Math.PI * kHeading / 360;
-        xKuvshinka += (int) (lengthJump*Math.sin(radians));
-        yKuvshinka -= (int) (lengthJump*Math.cos(radians));
-
-        target = new Target(hashMapImg, hashMapSize , xKuvshinka, yKuvshinka);
+        target.setPoisition(xKuvshinka, yKuvshinka);
+//        target = new Target(hashMapImg, hashMapSize , xKuvshinka, yKuvshinka);
     }
 
 //    private void putToHash() {
