@@ -21,6 +21,7 @@ public class MyThread extends Thread implements Constants {
     protected int curentState;
     private ArrayList<Kuvshinka> arrayKuvshinka;
     private ArrayList<Heart> arrayHeart;
+    private ArrayList<Hippo> arrayHippo;
     Player player;
     Kuvshinka kuvshinka, lastKuvshinka;
     Hippo hippo;
@@ -35,22 +36,21 @@ public class MyThread extends Thread implements Constants {
     MyView myView;
     MainActivity m;
     private int countLive = 3;
-//    private Kamish kamish;
-//    private Target target;
-//    private GameOver game_over;
     private Win win;
     private boolean canDrawGameOver = false;
     long now;
     MakeDrawable makeDrawable;
     MakeStage1 makeStage1;
-
+    MakeStage2 makeStage2;
+    MakeStage3 makeStage3;
     Rect rectFrog;
     private Map<String, Drawable> hashMapImg;
     private Map<String, Integer> hashMapSize;
     Bitmap backgroundImg;
 //    Background background;
     int timeUnderWater;
-    BasicData basicData;
+    int lengthJump;
+    int stage;
 
     MyThread(MyView myView, SurfaceHolder surfaceHolder, Context context, Handler handler) {
 //        Log.i(TAG, "Begin Constructor MyThread");
@@ -58,29 +58,26 @@ public class MyThread extends Thread implements Constants {
         this.surfaceHolder = surfaceHolder;
         this.handler = handler;
         this.context = context;
-
         makeDrawable = new MakeDrawable(context, this);
-        basicData = new BasicData(hashMapImg, hashMapSize, this);
-        makeStage1 = new MakeStage1(hashMapImg, hashMapSize, this, handler);
-        lastKuvshinka = arrayKuvshinka.get(0);
-
-        inputOutput = new InputOutput(myView, player, this);
+        inputOutput = new InputOutput(myView, this);
+        lengthJump = hashMapSize.get("lengthJump");
         setState(STATE_RUNING);
+        setStage(STAGE_1);
     }
-
     public void ObjFromHash(Map<String, Object> gameObject) {
         player = (Player) gameObject.get("player");
-        hippo = (Hippo) gameObject.get("hippo");
+//        hippo = (Hippo) gameObject.get("hippo");
         splash = (Splash) gameObject.get("splash");
         kamish = (Kamish) gameObject.get("kamish");
         mGameOver = (GameOver) gameObject.get("mGameOver");
         target = (Target) gameObject.get("target");
         win = (Win) gameObject.get("win");
     }
-
-    public void setArray(ArrayList<Kuvshinka> arrayKuvshinka, ArrayList<Heart> arrayHeart){
+    public void setArray(ArrayList<Kuvshinka> arrayKuvshinka, ArrayList<Heart> arrayHeart, ArrayList<Hippo>arrayHippo){
         this.arrayKuvshinka = arrayKuvshinka;
+        lastKuvshinka = arrayKuvshinka.get(0);
         this.arrayHeart = arrayHeart;
+        this.arrayHippo = arrayHippo;
     }
     public void setHash(Map<String, Drawable> hashMapImg, Map<String, Integer> hashMapSize, Bitmap backgroundImg){
         this.hashMapImg = hashMapImg;
@@ -90,25 +87,19 @@ public class MyThread extends Thread implements Constants {
     public void setRunning(boolean b) {
         running = b;
     }
-
-
     public void setTimeUnderWater(int timeUnderWater) {
         this.timeUnderWater = timeUnderWater;
     }
 
     public void setState(int state) {/////////////****************************////////////////////////////
-        CharSequence str;
+//        CharSequence str;
         curentState = state;
-//        Log.i(TAG, "Begin setState");
 
         if(curentState == STATE_RUNING) {
-//            player.setState(STATE_ONKUVSHINKA);
-//            hippo.setState(STATE_MOVE);
-//            paint.setColor(Color.BLACK);
             running = true;
 
         }else if (curentState == STATE_PAUSE) {
-            str = context.getResources().getText(R.string.mode_pause);
+//            str = context.getResources().getText(R.string.mode_pause);
             running = false;
 
         }else if (curentState == STATE_BULK) {
@@ -123,18 +114,11 @@ public class MyThread extends Thread implements Constants {
                 setState(STATE_LOSE);
             }
 
-        }else if (curentState == STAGE_1) {
-
-
-        }else if (curentState == STAGE_2) {
-
-
-        }else if (curentState == STAGE_3) {
-
-
         }else if (curentState == STATE_LOSE) {
             player.setState(STATE_LOSE);
-            hippo.setState(STATE_PAUSE);
+            for(Hippo h : arrayHippo) {
+                h.setState(STATE_PAUSE);
+            }
             mTimer(2000);
 
 
@@ -144,42 +128,74 @@ public class MyThread extends Thread implements Constants {
             win();
         }
     }
-    protected void checkLocation(Rect rectFrog) {
+    protected void setStage(int s){
+        stage = s;
+        if (stage == STAGE_1) {
+            makeStage1 = new MakeStage1(hashMapImg, hashMapSize, this, handler);
+            player.setCurentKufsh(arrayKuvshinka.get(0));
+            player.setState(Constants.STATE_ONKUVSHINKA);
+
+        }else if (stage == STAGE_2) {
+            makeStage2 = new MakeStage2(hashMapImg, hashMapSize, this, handler);
+            player.setCurentKufsh(arrayKuvshinka.get(0));
+            player.setState(Constants.STATE_ONKUVSHINKA);
+
+        }else if (stage == STAGE_3) {
+            player.setCurentKufsh(arrayKuvshinka.get(0));
+            player.setState(Constants.STATE_ONKUVSHINKA);
+        }
+    }
+    protected void checkLocation(Rect rectFrog, int x, int y) {
         boolean contains = false;
-        this.rectFrog = rectFrog;
+        this.rectFrog = rectFrog;////////////////////////
+        int lengthFly = (int) Math.sqrt((rectFrog.centerX()-x)*(rectFrog.centerX()-x)+(rectFrog.centerY()-y)
+                *(rectFrog.centerY()-y));
+        boolean mustFly = lengthFly < lengthJump/4 ;
+        if (mustFly) return;
+//        boolean contains = myThread.checkLocation(rect);
+        boolean jump = lengthFly < lengthJump;
+//        if ((contains) setState(STATE_ONKUVSHINKA);
+
         for(Kuvshinka k : arrayKuvshinka) {
             if (k.getRect().contains(rectFrog.centerX(), rectFrog.centerY())) {
                 lastKuvshinka = k;
+//                player.setCurentOdj("kuvshinka", k);
 //                rectFrog.offset(k.getRect().centerX()-rectFrog.centerX(), k.getRect().centerY()-rectFrog.centerY());
 //                player.setPositionFrog(rectFrog);
+                player.setCurentKufsh(lastKuvshinka);
                 player.setState(STATE_ONKUVSHINKA);
                 contains = true;
             }
         }
-        if (hippo.getRect().contains(rectFrog.centerX(), rectFrog.centerY())){
+        if (!contains) {
+            for (Hippo h : arrayHippo) {
+                if (h.getRect().contains(rectFrog.centerX(), rectFrog.centerY())) {
 //            rectFrog.offset(hippo.getRect().centerX()-rectFrog.centerX(), hippo.getRect().centerY()-rectFrog.centerY());
 //            player.setPositionFrog(rectFrog);
-            player.setState(STATE_ONHIPPO);
-            contains = true;
+                    player.setState(STATE_ONHIPPO);
+                    player.setCurentHippo(h);
+                    contains = true;
+                }
+            }
         }
-        else if (target.getRect().contains(rectFrog.centerX(), rectFrog.centerY())){
-            switch (curentState){
+        if (target.getRect().intersect(rectFrog) && !contains){
+            switch (stage){
                 case STAGE_1:{
-                    setState(STAGE_2);
+                    setStage(STAGE_2);
                     break;
                 }
                 case STAGE_2:{
-                    setState(STAGE_3);
+                    setStage(STAGE_3);
                     break;
                 }
                 case STAGE_3:{
-                    setState(STATE_WIN);
+                    setStage(STATE_WIN);
                     break;
                 }
             }
             contains = true;
         }
-        if (!contains) setState(STATE_BULK);
+        if (!mustFly && !jump && !contains) setState(STATE_BULK);;
     }
 
     private void gameOver() {
@@ -209,8 +225,11 @@ public class MyThread extends Thread implements Constants {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                if(curentState == STATE_LOSE){
-                    gameOver();
+                switch (curentState) {
+                    case STATE_LOSE: {
+                        gameOver();
+                        break;
+                    }
                 }
             }
         }).start();
@@ -244,16 +263,20 @@ public class MyThread extends Thread implements Constants {
     }
     private void updatePhysics() {
         player.updatePhysics();
-        hippo.updatePhysics();
+//        hippo.updatePhysics();
+        for(Hippo h : arrayHippo) {
+            h.updatePhysics();
+        }
         mGameOver.updatePhysics();
         win.updatePhysics();
 
         if (curentState == STATE_BULK) {
             Rect rect = new Rect(player.getRect());
             if(System.currentTimeMillis()>now + timeUnderWater) {
-                rect.offset(lastKuvshinka.getRect().centerX() - rect.centerX(), lastKuvshinka.getRect().centerY() - rect.centerY());
-                player.setPositionFrog(rect);
+//                rect.offset(lastKuvshinka.getRect().centerX() - rect.centerX(), lastKuvshinka.getRect().centerY() - rect.centerY());
+                player.setCurentKufsh(lastKuvshinka);
                 player.setState(STATE_ONKUVSHINKA);
+                setState(STATE_RUNING);
             }
         }
     }
@@ -278,9 +301,10 @@ public class MyThread extends Thread implements Constants {
             h.getCurentImg().setBounds(h.getRect());
             h.getCurentImg().draw(canvas);
         }
-
-        hippo.getCurentImg().setBounds(hippo.getRect());
-        hippo.getCurentImg().draw(canvas);
+        for(Hippo h : arrayHippo) {
+            h.getCurentImg().setBounds(h.getRect());
+            h.getCurentImg().draw(canvas);
+        }
 
         if (curentState != STATE_BULK && curentState != STATE_LOSE && curentState != STATE_WIN) {
             canvas.save();
@@ -305,5 +329,16 @@ public class MyThread extends Thread implements Constants {
         }
     }
 
+    public void setTouchDown(float x, float y) {
+        player.setTouchDown(x, y);
+    }
+
+    public void setHeading(float x, float y) {
+        player.setHeading(x, y);
+    }
+
+    public void setTouchUp(float x, float y) {
+        player.setTouchUp(x, y);
+    }
 }
 

@@ -17,7 +17,7 @@ package com.example.max.happypool; //сохранение текущ состо�
 public class MyView extends SurfaceView implements SurfaceHolder.Callback, Constants {
 
     MyThread thread ;
-    public TextView tvt1;
+//    public TextView tvt1;
     private String str;
 
     MyView(Context context) {
@@ -83,8 +83,8 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback, Const
         }
     }
 
-    public void setTextView(TextView tvt1) {
-        this.tvt1=tvt1;
-    }
+//    public void setTextView(TextView tvt1) {
+//        this.tvt1=tvt1;
+//    }
 }
 

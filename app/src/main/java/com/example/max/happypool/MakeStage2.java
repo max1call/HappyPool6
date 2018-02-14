@@ -1,15 +1,31 @@
 
 package com.example.max.happypool;
 
-        import android.graphics.drawable.Drawable;
-        import android.os.Handler;
-//        import java.util.ArrayList;
-//        import java.util.HashMap;
-        import java.util.Map;
+import android.graphics.drawable.Drawable;
+import android.os.Handler;
 
-class MakeStage1 extends MakeStage{
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-    MakeStage1(Map<String, Drawable> hashMapImg, Map<String, Integer> hashMapSize, MyThread myThread, Handler handler) {
+class MakeStage2 extends MakeStage {
+
+//     Map<String, Drawable> hashMapImg;
+//     Map<String, Integer> hashMapSize;
+//     Map<String, Object> gameObject;
+//     ArrayList<Kuvshinka> arrayKuvshinka;
+//     ArrayList<Heart> arrayHeart;
+//     Hippo hippo;
+//     Player player;
+//     Splash splash;
+//     Target target;
+//     Kamish kamish;
+//     Win win;
+//     GameOver gameOver;
+//     int xPlayer, yPlayer;
+//     int xHippo, yHippo;
+
+    MakeStage2(Map<String, Drawable> hashMapImg, Map<String, Integer> hashMapSize, MyThread myThread, Handler handler) {
         super(hashMapImg, hashMapSize, myThread, handler);
 //        this.hashMapImg = hashMapImg;
 //        this.hashMapSize = hashMapSize;
@@ -40,16 +56,17 @@ class MakeStage1 extends MakeStage{
 //        myThread.setTimeUnderWater(timeUnderWater);
     }
     @Override
-    void makeKuvshinks(){ //makeKuvshinks(){
+    void makeKuvshinks(){
         int kHeading;
         double radians;
         int lengthJump = hashMapSize.get("lengthJump");
+
         int xKuvshinka = (int) (0.3*hashMapSize.get("kuvshinkaWidth"));
         int yKuvshinka = (hashMapSize.get("mCanvasHeight") - 3*hashMapSize.get("kuvshinkaHeight"));
         newKuvshinka(xKuvshinka, yKuvshinka);
-//        xPlayer = 0;//xKuvshinka+(hashMapSize.get("kuvshinkaWidth")-hashMapSize.get("idleFrogWidth"))/2;
-//        yPlayer = 0;//yKuvshinka+(hashMapSize.get("kuvshinkaHeight")-hashMapSize.get("idleFrogHeight"))/2;
 
+        xPlayer = xKuvshinka+(hashMapSize.get("kuvshinkaWidth")-hashMapSize.get("idleFrogWidth"))/2;
+        yPlayer = yKuvshinka+(hashMapSize.get("kuvshinkaHeight")-hashMapSize.get("idleFrogHeight"))/2;
 
         kHeading = 35;
         radians = 2 * Math.PI * kHeading / 360;
@@ -61,7 +78,9 @@ class MakeStage1 extends MakeStage{
         radians = 2 * Math.PI * kHeading / 360;
         xKuvshinka += (int) (lengthJump*Math.sin(radians));
         yKuvshinka -= (int) (lengthJump*Math.cos(radians));
-        newKuvshinka(xKuvshinka, yKuvshinka);
+        xHippo = xKuvshinka;
+        yHippo = yKuvshinka;
+        newHippo(xHippo, yHippo);
 
         kHeading = 90;
         radians = 2 * Math.PI * kHeading / 360;
@@ -70,7 +89,6 @@ class MakeStage1 extends MakeStage{
         xHippo = xKuvshinka;
         yHippo = yKuvshinka;
         newHippo(xHippo, yHippo);
-//        hippo = new Hippo(hashMapImg, hashMapSize, speedHippo, xHippo, yHippo);
 
         kHeading = 35;
         radians = 2 * Math.PI * kHeading / 360;
@@ -79,7 +97,7 @@ class MakeStage1 extends MakeStage{
 
         target = new Target(hashMapImg, hashMapSize , xKuvshinka, yKuvshinka);
     }
-//
+
 //    private void putToHash() {
 //        gameObject = new HashMap<>();
 //        gameObject.put("hippo", hippo);

@@ -1,9 +1,11 @@
 package com.example.max.happypool;
 
-        import android.graphics.Rect;
-        import android.graphics.drawable.Drawable;
-        import android.util.Log;
-        import java.util.Map;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 public class Player extends PlayObject implements Constants {
 
@@ -13,26 +15,31 @@ public class Player extends PlayObject implements Constants {
     private int speedFly;
     private double radians;
     MyThread myThread;
-    Hippo hippo;
+    ArrayList<Hippo> arrayHippo;
+    Hippo curentHippo;
+    Kuvshinka curentKuvsh;
+//    Object object;
 
-    Player(Map<String, Drawable> hashMapImg, Map<String, Integer> hashMapSize, int speedFly, MyThread myThread, Hippo hippo) {
-        super(hashMapImg, hashMapSize, 0, 0);
+    Player(Map<String, Drawable> hashMapImg, Map<String, Integer> hashMapSize, int x, int y, int speedFly, MyThread myThread, ArrayList<Hippo> hippo) {
+        super(hashMapImg, hashMapSize, x, y);
         this.speedFly=speedFly;
         this.myThread=myThread;
-        this.hippo=hippo;
+        this.arrayHippo=arrayHippo;
+//        curentHippo = arrayHippo.get(0);
         lengthJump = hashMapSize.get("lengthJump");
         heading = 0;
-//        this.speedFly = 10;
 //        rect.set(x, y, x + hashMapSize.get("idleFrogWidth"), y + hashMapSize.get("idleFrogHeight"));
-        rect.set(0, 0, hashMapSize.get("idleFrogWidth"), hashMapSize.get("idleFrogHeight"));
-        setState(STATE_ONKUVSHINKA);
+//        curentImg = hashMapImg.get("idleFrogImg");
+        curentState = STATE_ONKUVSHINKA;
+//        setState(STATE_ONKUVSHINKA);
     }
     public void setState(int curentState) {/////////////////******************////////////////////////////
         this.curentState = curentState;
         if(curentState == STATE_ONKUVSHINKA){
-            myThread.setState(STATE_RUNING);
+//            myThread.setState(STATE_RUNING);
             curentImg = hashMapImg.get("idleFrogImg");
             rect.set(rect.left, rect.top, rect.left + hashMapSize.get("idleFrogWidth"), rect.top + hashMapSize.get("idleFrogHeight"));
+            rect.offset(curentKuvsh.getRect().centerX() - rect.centerX(), curentKuvsh.getRect().centerY() - rect.centerY());
         }
         else if (curentState == STATE_MOVE) {
             curentImg = curentImg = hashMapImg.get("flyFrogImg");
@@ -74,6 +81,8 @@ public class Player extends PlayObject implements Constants {
     }
     public void setTouchUp(float x, float y){
         if (readXY) {
+            x1 = rect.centerX();
+            y1 = rect.centerY();
             dy = (int) (speedFly*Math.cos(radians));
             dx = (int) (speedFly*Math.sin(radians));
             setState(STATE_MOVE);
@@ -81,30 +90,29 @@ public class Player extends PlayObject implements Constants {
         }
     }
     public void updatePhysics() {
-//        msg = handler.obtainMessage();
-//        Bundle b = new Bundle();
-//        b.putInt("countLive", curentState);
-//        msg.setData(b);
-//        msg.what=1;
-//        handler.sendMessage(msg);
         if (curentState == STATE_MOVE) {
             rect.offset(dx, -dy);
-            if (Math.sqrt((rect.centerX()-x1)*(rect.centerX()-x1)+(rect.centerY()-y1)*(rect.centerY()-y1))>lengthJump) {
-                myThread.checkLocation(rect);
-            }
+            myThread.checkLocation(rect, x1, y1);
         }
         else if (curentState == STATE_ONHIPPO) {
-            rect.offset(hippo.getRect().centerX() - rect.centerX(), hippo.getRect().centerY() - rect.centerY());
+
+                rect.offset(curentHippo.getRect().centerX() - rect.centerX(), curentHippo.getRect().centerY() - rect.centerY());
+
         }
 
         else if (curentState == STATE_LOSE) {
 
         }
     }
-    protected void setPositionFrog(Rect r){
-        rect.set(r);
+//    protected void setPositionFrog(Rect r){
+//        rect.set(r);
+//    }
+    protected void setCurentHippo(Hippo h){
+            curentHippo = h;
+    }
+    protected void setCurentKufsh(Kuvshinka k){
+            curentKuvsh = k;//TODO use!
     }
 
 
 }
-

@@ -10,17 +10,14 @@ package com.example.max.happypool;
 
 public class InputOutput implements OnTouchListener{
 
-    Player player;
     MyThread thread;
     float x;
     float y;
     MyView myView;
-    String TAG="fly";
 
-    public InputOutput(MyView myView, Player player, MyThread myThread) {
+    public InputOutput(MyView myView, MyThread myThread) {
         thread = myThread;
         this.myView = myView;
-        this.player = player;
         myView.setOnTouchListener(this);
     }
 //    /** Called when the activity is first created. */
@@ -31,28 +28,21 @@ public class InputOutput implements OnTouchListener{
 //        tv.setOnTouchListener(this);
 //        setContentView(tv);
 //    }
-
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         x = event.getX();
         y = event.getY();
-
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN: { // нажатие
-                Log.w(TAG, "Down: " + x + "," + y);
-                player.setTouchDown(x, y);
-//                thread.showCoordDown(x, y);
+                thread.setTouchDown(x, y);
                 break;
             }
             case MotionEvent.ACTION_MOVE: // движение
-                player.setHeading(x, y);
-                Log.w(TAG, "Move: " + x + "," + y);
+                thread.setHeading(x, y);
                 break;
             case MotionEvent.ACTION_UP: // отпускание
             case MotionEvent.ACTION_CANCEL:
-                player.setTouchUp(x, y);
-//                thread.showCoordUp(x, y);
-                Log.w(TAG, "Up: " + x + "," + y);
+                thread.setTouchUp(x, y);
                 break;
         }
         return true;

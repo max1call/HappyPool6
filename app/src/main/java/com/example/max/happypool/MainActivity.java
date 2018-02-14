@@ -22,7 +22,7 @@ public class MainActivity extends Activity {
     String TAG="Target";
     MyView myView;
     MyThread myThread;
-    public TextView tvt1;
+//    public TextView tvt1;
     Context context;
     AttributeSet attrs;
 
@@ -40,9 +40,9 @@ public class MainActivity extends Activity {
 //        tvt1 = new TextView(this);
 //        tvt1.setText("dfsfsdfsfs dfsfs");
 //        myView.setTextView(tvt1);
-        RelativeLayout mLayout = (RelativeLayout) findViewById(R.id.relLay);
-        tvt1 = new TextView(this);
-        tvt1.setText("Jooopppa!!!");
-        mLayout.addView(tvt1);
+//        RelativeLayout mLayout = (RelativeLayout) findViewById(R.id.relLay);
+//        tvt1 = new TextView(this);
+//        tvt1.setText("Jooopppa!!!");
+//        mLayout.addView(tvt1);
     }
 }

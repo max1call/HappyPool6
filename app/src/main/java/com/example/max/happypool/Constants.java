@@ -13,3 +13,9 @@ public interface Constants {
     public static final int STAGE_2 = 10;
     public static final int STAGE_3 = 11;
 }
+//        msg = handler.obtainMessage();
+//        Bundle b = new Bundle();
+//        b.putInt("countLive", curentState);
+//        msg.setData(b);
+//        msg.what=1;
+//        handler.sendMessage(msg);
