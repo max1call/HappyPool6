@@ -20,8 +20,10 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback, Const
 //    public TextView tvt1;
     private String str;
 
+
     MyView(Context context) {
         super(context);
+
         SurfaceHolder holder = getHolder();
         holder.addCallback(this);
 
@@ -82,6 +84,7 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback, Const
             }
         }
     }
+
 
 //    public void setTextView(TextView tvt1) {
 //        this.tvt1=tvt1;

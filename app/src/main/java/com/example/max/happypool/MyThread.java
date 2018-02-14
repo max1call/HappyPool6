@@ -1,11 +1,13 @@
 package com.example.max.happypool;// 3 стажа, сохранение, возврат после победы и поражения, звук.
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.view.SurfaceHolder;
+import android.view.View;
 import android.widget.TextView;
 import android.os.Handler;
 
@@ -291,6 +293,8 @@ public class MyThread extends Thread implements Constants {
                 player.setState(STATE_ONKUVSHINKA);
                 setState(STATE_RUNING);
             }
+        } else if (curentState == STATE_LOSE) {
+
         }
     }
 
@@ -343,7 +347,14 @@ public class MyThread extends Thread implements Constants {
     }
 
     public void setTouchDown(float x, float y) {
-        player.setTouchDown(x, y);
+        if (curentState != STATE_LOSE && curentState != STATE_WIN) {
+            player.setTouchDown(x, y);
+        } else {
+//                Intent intent = new Intent(context, MenuActivity.class);
+//                startActivity(intent);
+            m.finish();
+
+        }
     }
 
     public void setHeading(float x, float y) {
@@ -368,6 +379,10 @@ public class MyThread extends Thread implements Constants {
 
     public Target getTarget() {
         return target;
+    }
+
+    public void setMainAktivity(MainActivity mainAktivity) {
+        m = mainAktivity;
     }
 }
 

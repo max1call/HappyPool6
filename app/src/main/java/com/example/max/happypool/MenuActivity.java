@@ -26,5 +26,7 @@ public class MenuActivity extends Activity {
         Intent intent = new Intent(MenuActivity.this, MainActivity.class);
         startActivity(intent);
     }
-
+    public void exit(View v){
+        finish();
+    }
 }
