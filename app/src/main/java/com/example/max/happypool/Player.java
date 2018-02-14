@@ -111,7 +111,7 @@ public class Player extends PlayObject implements Constants {
             curentHippo = h;
     }
     protected void setCurentKufsh(Kuvshinka k){
-            curentKuvsh = k;//TODO use!
+            curentKuvsh = k;
     }
 
 
