@@ -32,6 +32,8 @@ class MakeStage1 extends MakeStage{
 
         gameOver = new GameOver(hashMapImg, hashMapSize, handler, hashMapSize.get("mCanvasWidth")/2, hashMapSize.get("mCanvasHeight")/2);
         win = new Win(hashMapImg, hashMapSize , hashMapSize.get("mCanvasWidth")/2, hashMapSize.get("mCanvasHeight")/2);
+        nextStage = new NextStage(hashMapImg, hashMapSize, myThread, hashMapSize.get("mCanvasWidth")/2, hashMapSize.get("mCanvasHeight")/2);
+
         putToHash();
         myThread.ObjFromHash(gameObject);
         myThread.setTimeUnderWater(timeUnderWater);
@@ -78,13 +80,13 @@ class MakeStage1 extends MakeStage{
     }
     private void putToHash() {
         gameObject = new HashMap<>();
-//        gameObject.put("hippo", hippo);
         gameObject.put("player", player);
         gameObject.put("splash", splash);
         gameObject.put("kamish", kamish);
         gameObject.put("mGameOver", gameOver);
         gameObject.put("win", win);
         gameObject.put("target", target);
+        gameObject.put("nextStage", nextStage);
     }
 
 

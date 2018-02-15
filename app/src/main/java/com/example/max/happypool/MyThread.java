@@ -40,6 +40,7 @@ public class MyThread extends Thread implements Constants {
     private int countLive = 3;
     private Win win;
     private boolean canDrawGameOver = false;
+    private boolean canDrawNextStage = false;
     long now;
     MakeDrawable makeDrawable;
     MakeStage1 makeStage1;
@@ -53,6 +54,7 @@ public class MyThread extends Thread implements Constants {
     int timeUnderWater;
     int lengthJump;
     int stage;
+    NextStage nextStage;
 
     MyThread(MyView myView, SurfaceHolder surfaceHolder, Context context, Handler handler) {
 //        Log.i(TAG, "Begin Constructor MyThread");
@@ -63,18 +65,18 @@ public class MyThread extends Thread implements Constants {
         makeDrawable = new MakeDrawable(context, this);
         inputOutput = new InputOutput(myView, this);
         lengthJump = hashMapSize.get("lengthJump");
-        setRunning(true);
+
         setState(STATE_RUNING);
         setStage(STAGE_1);
     }
     public void ObjFromHash(Map<String, Object> gameObject) {
         player = (Player) gameObject.get("player");
-//        hippo = (Hippo) gameObject.get("hippo");
         splash = (Splash) gameObject.get("splash");
         kamish = (Kamish) gameObject.get("kamish");
         mGameOver = (GameOver) gameObject.get("mGameOver");
         target = (Target) gameObject.get("target");
         win = (Win) gameObject.get("win");
+        nextStage = (NextStage) gameObject.get("nextStage");
     }
     public void setArray(ArrayList<Kuvshinka> arrayKuvshinka, ArrayList<Heart> arrayHeart, ArrayList<Hippo>arrayHippo){
         this.arrayKuvshinka = arrayKuvshinka;
@@ -122,7 +124,7 @@ public class MyThread extends Thread implements Constants {
             for(Hippo h : arrayHippo) {
                 h.setState(STATE_PAUSE);
             }
-            mTimer(2000);
+            mTimer(2000, STATE_LOSE);
 
 
         }else if (curentState == STATE_WIN) {
@@ -137,11 +139,21 @@ public class MyThread extends Thread implements Constants {
     protected void setStage(int s){
         stage = s;
         if (stage == STAGE_1) {
+
             makeStage1 = new MakeStage1(hashMapImg, hashMapSize, this, handler);
+            setRunning(true);
+//            goNextStage();
+            nextStage.setStage(STAGE_1);
+            canDrawNextStage = true;
+            mTimer(3000, STAGE_1);
             player.setCurentKufsh(arrayKuvshinka.get(0));
             player.setState(Constants.STATE_ONKUVSHINKA);
 
         }else if (stage == STAGE_2) {
+//            goNextStage();
+            nextStage.setStage(STAGE_2);
+            canDrawNextStage = true;
+            mTimer(2000, STAGE_1);
             makeStage2 = new MakeStage2(hashMapImg, hashMapSize, this, handler);
 //            makeStage2.setArray(arrayKuvshinka, arrayHeart, arrayHippo);
             lastKuvshinka = arrayKuvshinka.get(0);
@@ -149,6 +161,10 @@ public class MyThread extends Thread implements Constants {
             player.setState(Constants.STATE_ONKUVSHINKA);
 
         }else if (stage == STAGE_3) {
+//            goNextStage();
+            nextStage.setStage(STAGE_3);
+            canDrawNextStage = true;
+            mTimer(2000, STAGE_1);
             makeStage3 = new MakeStage3(hashMapImg, hashMapSize, this, handler);
 //            makeStage3.setArray(arrayKuvshinka, arrayHeart, arrayHippo);
             lastKuvshinka = arrayKuvshinka.get(0);
@@ -214,6 +230,11 @@ public class MyThread extends Thread implements Constants {
         mGameOver.setCanUpdate(true);
         canDrawGameOver = true;
     }
+//    private void goNextStage() {
+////        nextStage.setCanUpdate(true);
+//
+//    }
+//    void setCanDrawNextStage(boolean b){canDrawNextStage = b;}
 
     private void win() {
 //        now = System.currentTimeMillis();
@@ -232,7 +253,8 @@ public class MyThread extends Thread implements Constants {
         }
     }
 
-    public void mTimer(final long delay){
+
+    public void mTimer(final long delay, final int st){
         new Thread(new Runnable() {
             public void run() {
                 try {
@@ -240,11 +262,25 @@ public class MyThread extends Thread implements Constants {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                switch (curentState) {
+                switch (st) {
                     case STATE_LOSE: {
                         gameOver();
                         break;
                     }
+                    case STAGE_1: {
+                        canDrawNextStage = false;
+                        break;
+                    }
+//                    case STAGE_2: {
+////                        nextStage.setStage(STAGE_2);
+//                        canDrawNextStage = false;
+//                        break;
+//                    }
+//                    case STAGE_3: {
+////                        nextStage.setStage(STAGE_3);
+//                        canDrawNextStage = false;
+//                        break;
+//                    }
                 }
             }
         }).start();
@@ -293,8 +329,8 @@ public class MyThread extends Thread implements Constants {
                 player.setState(STATE_ONKUVSHINKA);
                 setState(STATE_RUNING);
             }
-        } else if (curentState == STATE_LOSE) {
-
+        } else if (stage == STAGE_1 && canDrawNextStage){
+//            nextStage.updatePhysics();
         }
     }
 
@@ -338,6 +374,11 @@ public class MyThread extends Thread implements Constants {
         if (curentState == STATE_WIN){
             win.getCurentImg().setBounds(win.getRect());
             win.getCurentImg().draw(canvas);
+        }
+
+        if (canDrawNextStage){
+            nextStage.getCurentImg().setBounds(nextStage.getRect());
+            nextStage.getCurentImg().draw(canvas);
         }
 
         if (curentState == STATE_LOSE && canDrawGameOver){

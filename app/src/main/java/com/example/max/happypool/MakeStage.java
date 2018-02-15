@@ -31,6 +31,7 @@ class MakeStage {
     int speedFly;
     int timeUnderWater;
     int lengthJump;
+    NextStage nextStage;
 
     MakeStage(Map<String, Drawable> hashMapImg, Map<String, Integer> hashMapSize, MyThread myThread, Handler handler) {
         this.myThread = myThread;
