@@ -15,9 +15,3 @@ public interface Constants {
     public static final int START = 12;
     public static final int LOAD = 14;
 }
-//        msg = handler.obtainMessage();
-//        Bundle b = new Bundle();
-//        b.putInt("countLive", curentState);
-//        msg.setData(b);
-//        msg.what=1;
-//        handler.sendMessage(msg);

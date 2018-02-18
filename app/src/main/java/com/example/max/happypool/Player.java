@@ -1,43 +1,30 @@
 package com.example.max.happypool;
 
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-
-import java.util.ArrayList;
 import java.util.Map;
 
-public class Player extends PlayObject implements Constants {
+class Player extends PlayObject implements Constants {
 
-    private int heading, x1, y1, dx, dy, lengthJump;
+    private int heading, x1, y1, dx, dy;
     private boolean readXY = false;
     private int curentState;
     private int speedFly;
     private double radians;
-    MyThread myThread;
-    ArrayList<Hippo> arrayHippo;
-    Hippo curentHippo;
-    Kuvshinka curentKuvsh;
-    MySound mySound;
+    private MyThread myThread;
+    private Hippo curentHippo;
+    private Kuvshinka curentKuvsh;
+    private MySound mySound;
 
-//    Object object;
-
-    Player(Map<String, Drawable> hashMapImg, Map<String, Integer> hashMapSize, int x, int y, int speedFly, MyThread myThread, ArrayList<Hippo> hippo) {
+    Player(Map<String, Drawable> hashMapImg, Map<String, Integer> hashMapSize, int x, int y, int speedFly, MyThread myThread) {
         super(hashMapImg, hashMapSize, x, y);
         this.speedFly=speedFly;
         this.myThread=myThread;
-        this.arrayHippo=arrayHippo;
-//        curentHippo = arrayHippo.get(0);
-        lengthJump = hashMapSize.get("lengthJump");
         heading = 0;
-//        rect.set(x, y, x + hashMapSize.get("idleFrogWidth"), y + hashMapSize.get("idleFrogHeight"));
-//        curentImg = hashMapImg.get("idleFrogImg");
         curentState = STATE_ONKUVSHINKA;
-//        setState(STATE_ONKUVSHINKA);
     }
-    public void setState(int curentState) {/////////////////******************////////////////////////////
+    void setState(int curentState) {
         this.curentState = curentState;
         if(curentState == STATE_ONKUVSHINKA){
-
             myThread.setState(Constants.STATE_ONKUVSHINKA);
             curentImg = hashMapImg.get("idleFrogImg");
             rect.set(rect.left, rect.top, rect.left + hashMapSize.get("idleFrogWidth"), rect.top + hashMapSize.get("idleFrogHeight"));
@@ -46,33 +33,23 @@ public class Player extends PlayObject implements Constants {
         else if (curentState == STATE_MOVE) {
             mySound.goSoundJump();
             myThread.setState(Constants.STATE_MOVE);
-            curentImg = curentImg = hashMapImg.get("flyFrogImg");
+            curentImg = hashMapImg.get("flyFrogImg");
             rect.set(rect.left, rect.top, rect.left + hashMapSize.get("flyFrogWidth"), rect.top + hashMapSize.get("flyFrogHeight"));
         }
         else if (curentState == STATE_ONHIPPO) {
             curentImg = hashMapImg.get("idleFrogImg");
             rect.set(rect.left, rect.top, rect.left + hashMapSize.get("idleFrogWidth"), rect.top + hashMapSize.get("idleFrogHeight"));
         }
-        else if (curentState == STATE_BULK) {
-//            myThread.setState(STATE_BULK);
-        }
-        else if (curentState == STATE_LOSE) {
-
-        }else if (curentState == STATE_WIN){
-            //win
-        }
     }
-    public int getHeading() {
+    int getHeading() {
         return heading;
     }
-
-    public void setTouchDown(float x, float y){
+    void setTouchDown(float x, float y){
         if (rect.contains((int)x, (int)y) && (curentState == STATE_ONKUVSHINKA || curentState == STATE_ONHIPPO)) {
             readXY = true;
-
         }
     }
-    public void setHeading(float x, float y){
+    void setHeading(float x, float y){
         if (readXY) {
             x1 = rect.centerX();
             y1 = rect.centerY();
@@ -81,7 +58,7 @@ public class Player extends PlayObject implements Constants {
             heading = (int) (radians*360/(2 * Math.PI));
         }
     }
-    public void setTouchUp(float x, float y){
+    void setTouchUp(){
         if (readXY) {
             x1 = rect.centerX();
             y1 = rect.centerY();
@@ -91,7 +68,7 @@ public class Player extends PlayObject implements Constants {
             readXY = false;
         }
     }
-    public void updatePhysics() {
+    void updatePhysics() {
         if (curentState == STATE_MOVE) {
             rect.offset(dx, -dy);
             myThread.checkLocation(rect, x1, y1);
@@ -100,20 +77,15 @@ public class Player extends PlayObject implements Constants {
             rect.offset(curentHippo.getRect().centerX() - rect.centerX(),
                         curentHippo.getRect().centerY() - rect.centerY());
         }
-
-        else if (curentState == STATE_LOSE) {
-        }
     }
-
-    protected void setCurentHippo(Hippo h){
+    void setCurentHippo(Hippo h){
             curentHippo = h;
     }
-    protected void setCurentKufsh(Kuvshinka k){
+    void setCurentKufsh(Kuvshinka k){
             curentKuvsh = k;
     }
-    public void setSound(MySound sound){
+    void setSound(MySound sound){
         mySound = sound;
         mySound.goSoundMusic();
     }
-
 }

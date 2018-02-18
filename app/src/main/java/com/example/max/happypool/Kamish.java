@@ -3,10 +3,6 @@ package com.example.max.happypool;
         import android.graphics.drawable.Drawable;
         import java.util.Map;
 
-/**
- * Created by асер on 04.02.2018.
- */
-
 public class Kamish extends PlayObject {
     Kamish(Map<String, Drawable> hashMapImg, Map<String, Integer> hashMapSize, int x, int y) {
         super(hashMapImg, hashMapSize, x, y);

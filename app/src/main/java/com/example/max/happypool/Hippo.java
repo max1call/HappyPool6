@@ -6,8 +6,7 @@ package com.example.max.happypool;
 public class Hippo extends PlayObject implements Constants {
 
     private final int speedHippo;
-    //    private Drawable hippoImg;
-    private int dy, speed, maxCanvasHeight, minCanvasHeight ;//x, y, hippoWidth, hippoHeight;
+    private int speed, maxCanvasHeight, minCanvasHeight ;
 
     Hippo(Map<String, Drawable> hashMapImg, Map<String, Integer> hashMapSize, int speedHippo, int x, int y){
         super(hashMapImg, hashMapSize, x, y);
@@ -29,25 +28,5 @@ public class Hippo extends PlayObject implements Constants {
             speed = 0;
         }
     }
-//    private void defineSizeImg() {
-//        hippoWidth = hippoImg.getIntrinsicWidth();
-//        hippoHeight = hippoImg.getIntrinsicHeight();
-//    }
-//    public void resizeImg(float coefficientScale) {
-//        hippoWidth = (int) (hippoWidth/coefficientScale);
-//        hippoHeight = (int) (hippoHeight/coefficientScale);
-//    }
-//
-//
-//    public void setState(int curentState) {
-//        if(curentState == STATE_ONKUVSHINKA){
-//
-//        }else if (curentState == STATE_MOVE) {
-//
-//        }
-//    }
-//    public Drawable getCurentImg() {
-//        return curentImg;
-//    }
 }
 

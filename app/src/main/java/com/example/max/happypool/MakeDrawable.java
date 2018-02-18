@@ -36,7 +36,6 @@ class MakeDrawable {
         putToHash();
         myThread.setHash(hashMapImg, hashMapSize, backgroundImg);
     }
-
     private void initImg() {
         backgroundImg = BitmapFactory.decodeResource(context.getResources(), R.drawable.background3);
         kamishImg = context.getResources().getDrawable(R.drawable.kamish);
@@ -112,7 +111,6 @@ class MakeDrawable {
             heartHeight = (int) (heartHeight/coefficientScale);
             targetWidth = (int) (targetWidth/coefficientScale);
             targetHeight = (int) (targetHeight/coefficientScale);
-
             stage1Width = (int) (stage1Width/coefficientScale);
             stage1Height = (int) (stage1Height/coefficientScale);
             stage2Width = (int) (stage2Width/coefficientScale);
@@ -134,11 +132,9 @@ class MakeDrawable {
         hashMapImg.put("hippoImg", hippoImg);
         hashMapImg.put("heartImg", heartImg);
         hashMapImg.put("targetImg", targetImg);
-
         hashMapImg.put("stage1Img", stage1Img);
         hashMapImg.put("stage2Img", stage2Img);
         hashMapImg.put("stage3Img", stage3Img);
-
         hashMapSize = new HashMap<String, Integer>();
         hashMapSize.put("kamishWidth",kamishWidth);
         hashMapSize.put("kamishHeight",kamishHeight);
@@ -159,7 +155,6 @@ class MakeDrawable {
         hashMapSize.put("heartHeight",heartHeight);
         hashMapSize.put("targetWidth",targetWidth);
         hashMapSize.put("targetHeight",targetHeight);
-
         hashMapSize.put("stage1Width",stage1Width);
         hashMapSize.put("stage1Height",stage1Height);
         hashMapSize.put("stage2Width",stage2Width);
@@ -167,10 +162,4 @@ class MakeDrawable {
         hashMapSize.put("stage3Width",stage3Width);
         hashMapSize.put("stage3Height",stage3Height);
     }
-//    protected Map<String, Integer> getHashMapSize(){
-//        return hashMapSize;
-//    }
-//    protected Map<String, Drawable> getHashMapImg(){
-//        return hashMapImg;
-//    }
 }
