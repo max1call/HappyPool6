@@ -51,9 +51,11 @@ public class MySound implements OnLoadCompleteListener{
         }
     public void goSoundFall() {
             soundPool.play(soundFall, 1, 1, 0, 0, 1);
+            soundPool.stop(bgMusic);
         }
     public void goSoundWin() {
             soundPool.play(soundWin, 1, 1, 0, 0, 1);
+            soundPool.stop(bgMusic);
         }
     public void goSoundShlep() {
             soundPool.play(goSoundShlep, 1, 1, 0, 0, 1);
@@ -65,5 +67,12 @@ public class MySound implements OnLoadCompleteListener{
 
     public void stopSoundMusic() {
         if (bgMusic>0) soundPool.stop(bgMusic);
+    }
+
+    public void finish() {
+        if (soundPool != null) {
+            soundPool.release();
+            soundPool = null;
+        }
     }
 }

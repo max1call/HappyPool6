@@ -12,6 +12,8 @@ public interface Constants {
     public static final int STAGE_1 = 9;
     public static final int STAGE_2 = 10;
     public static final int STAGE_3 = 11;
+    public static final int START = 12;
+    public static final int LOAD = 14;
 }
 //        msg = handler.obtainMessage();
 //        Bundle b = new Bundle();

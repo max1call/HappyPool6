@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/HappyPool.iml" filepath="$PROJECT_DIR$/HappyPool.iml" />
-      <module fileurl="file://D:\AndroidSDK\Projekts\HappyPool\HappyPool2.iml" filepath="D:\AndroidSDK\Projekts\HappyPool\HappyPool2.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

@@ -34,7 +34,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_margin="5dp"
             android:background="@drawable/btn_load"
-            android:onClick="exit" />
+            android:onClick="load" />
 
         <Button
             android:id="@+id/btn_exit"

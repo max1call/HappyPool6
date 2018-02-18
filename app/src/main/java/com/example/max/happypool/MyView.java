@@ -20,7 +20,7 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback, Const
     private String str;
 
 
-    MyView(Context context) {
+    MyView(Context context, int startFrom) {
         super(context);
 
         SurfaceHolder holder = getHolder();
@@ -32,7 +32,7 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback, Const
 //        tvt1 = (TextView) findViewById(R.id.tv1);
 //        tvt1 = new TextView(context);
 
-        thread = new MyThread(this, holder, context, new Handler() {
+        thread = new MyThread(startFrom, this, holder, context, new Handler() {
             @Override
             public void handleMessage(Message m) {
                 if(m.what==STATE_LOSE){

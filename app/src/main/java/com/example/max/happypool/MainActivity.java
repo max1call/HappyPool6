@@ -14,6 +14,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import javax.security.auth.login.LoginException;
 
@@ -25,11 +26,14 @@ public class MainActivity extends Activity {
 //    public TextView tvt1;
     Context context;
     AttributeSet attrs;
+    int startFrom;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        myView = new MyView(this);
+        startFrom = getIntent().getIntExtra("BEGIN_FROM", 3);
+        myView = new MyView(this, startFrom);
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(myView);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -37,14 +41,21 @@ public class MainActivity extends Activity {
 //        myView = new MyView(context);
         myThread=myView.getThread();
         myThread.setMainAktivity(this);
-//        tvt1 = findViewById(R.id.tv1);
-//        tvt1 = new TextView(this);
-//        tvt1.setText("dfsfsdfsfs dfsfs");
-//        myView.setTextView(tvt1);
-//        RelativeLayout mLayout = (RelativeLayout) findViewById(R.id.relLay);
-//        tvt1 = new TextView(this);
-//        tvt1.setText("Jooopppa!!!");
-//        mLayout.addView(tvt1);
-
+        Log.d("Load", "2savedInstanceState = "+savedInstanceState);
+//        if (savedInstanceState != null) {
+////            myThread.restoreState(savedInstanceState);
+//            Log.w("Load", "savedInstanceState = "+savedInstanceState);
+//        }
+    }
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+//        Log.d("LoadM", "ONsavedInstanceState");
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d("LoadM", "Pause");
+        myThread.saveData();
     }
 }

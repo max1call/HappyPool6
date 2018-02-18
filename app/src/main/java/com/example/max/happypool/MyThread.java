@@ -2,17 +2,23 @@ package com.example.max.happypool;// 3 стажа, сохранение, воз�
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.View;
 import android.widget.TextView;
 import android.os.Handler;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Map;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class MyThread extends Thread implements Constants {
 
@@ -56,8 +62,10 @@ public class MyThread extends Thread implements Constants {
     int stage;
     NextStage nextStage;
     MySound mySound;
+    String KEY_Stage = "Stage";
+    SharedPreferences sPref;
 
-    MyThread(MyView myView, SurfaceHolder surfaceHolder, Context context, Handler handler) {
+    MyThread(int startFrom, MyView myView, SurfaceHolder surfaceHolder, Context context, Handler handler) {
         this.myView = myView;
         this.surfaceHolder = surfaceHolder;
         this.handler = handler;
@@ -65,10 +73,8 @@ public class MyThread extends Thread implements Constants {
         makeDrawable = new MakeDrawable(context, this);
         inputOutput = new InputOutput(myView, this);
         lengthJump = hashMapSize.get("lengthJump");
-
+        startGame(startFrom);
         setState(STATE_RUNING);
-        setStage(STAGE_1);
-
     }
     public void ObjFromHash(Map<String, Object> gameObject) {
         player = (Player) gameObject.get("player");
@@ -126,7 +132,7 @@ public class MyThread extends Thread implements Constants {
             }
 
         }else if (curentState == STATE_LOSE) {
-            mySound.goSoundFall();
+//
             player.setState(STATE_LOSE);
             for(Hippo h : arrayHippo) {
                 h.setState(STATE_PAUSE);
@@ -141,6 +147,62 @@ public class MyThread extends Thread implements Constants {
             }
 //            hippo.setState(STATE_PAUSE);
             win();
+        }
+    }
+    private void startGame(int startFrom) {
+        int saveStage;
+
+//        Log.d("abc", "startFrom = "+startFrom);
+        if (startFrom == START) {
+            saveStage=STAGE_1;
+            stage = saveStage;
+        } else {
+            sPref = context.getSharedPreferences("MyPref", MODE_PRIVATE);
+            saveStage = sPref.getInt(KEY_Stage, STAGE_1);
+            stage = saveStage;
+//            Toast.makeText(context, "Stage loaded", Toast.LENGTH_SHORT).show();
+
+        }
+        switch (saveStage){
+            case STAGE_1:{
+                makeStage1 = new MakeStage1(hashMapImg, hashMapSize, this, handler);
+                player.setSound(mySound);
+                setRunning(true);
+                mySound.goSoundMusic();
+                nextStage.setStage(STAGE_1);
+                canDrawNextStage = true;
+                mTimer(3000, STAGE_1);
+                player.setCurentKufsh(arrayKuvshinka.get(0));
+                player.setState(Constants.STATE_ONKUVSHINKA);
+                break;
+            }
+            case STAGE_2:{
+                makeStage1 = new MakeStage1(hashMapImg, hashMapSize, this, handler);
+                player.setSound(mySound);
+                nextStage.setStage(STAGE_2);
+                canDrawNextStage = true;
+                mTimer(2000, STAGE_1);
+
+                makeStage2 = new MakeStage2(hashMapImg, hashMapSize, this, handler);
+                lastKuvshinka = arrayKuvshinka.get(0);
+                player.setCurentKufsh(lastKuvshinka);
+                player.setState(Constants.STATE_ONKUVSHINKA);
+                break;
+            }
+            case STAGE_3:{
+                makeStage1 = new MakeStage1(hashMapImg, hashMapSize, this, handler);
+                player.setSound(mySound);
+                nextStage.setStage(STAGE_3);
+                canDrawNextStage = true;
+                mTimer(2000, STAGE_1);
+
+                makeStage2 = new MakeStage2(hashMapImg, hashMapSize, this, handler);
+                makeStage3 = new MakeStage3(hashMapImg, hashMapSize, this, handler);
+                lastKuvshinka = arrayKuvshinka.get(0);
+                player.setCurentKufsh(lastKuvshinka);
+                player.setState(Constants.STATE_ONKUVSHINKA);
+                break;
+            }
         }
     }
     protected void setStage(int s){
@@ -239,6 +301,7 @@ public class MyThread extends Thread implements Constants {
 
     private void gameOver() {
 //        now = System.currentTimeMillis();
+        mySound.goSoundFall();
         mGameOver.setCanUpdate(true);
         canDrawGameOver = true;
     }
@@ -440,6 +503,62 @@ public class MyThread extends Thread implements Constants {
         m = mainAktivity;
     }
     public Context getContext(){return context;}
+
+    void saveData(){
+        sPref = context.getSharedPreferences("MyPref", MODE_PRIVATE);
+        SharedPreferences.Editor ed = sPref.edit();
+        ed.putInt(KEY_Stage, stage);
+        ed.commit();
+//        Toast.makeText(context, "Stage saved", Toast.LENGTH_SHORT).show();
+        mySound.finish();
+    }
+//    public Bundle saveState(Bundle map) {
+//
+//        synchronized (surfaceHolder) {
+//            if (map != null) {
+//                map.putInt(KEY_Stage, Integer.valueOf(stage));
+//                map.putDouble(KEY_X, Double.valueOf(mX));
+//                map.putDouble(KEY_Y, Double.valueOf(mY));
+//                map.putDouble(KEY_DX, Double.valueOf(mDX));
+//                map.putDouble(KEY_DY, Double.valueOf(mDY));
+//                map.putDouble(KEY_HEADING, Double.valueOf(mHeading));
+//                map.putInt(KEY_LANDER_WIDTH, Integer.valueOf(mLanderWidth));
+//                map.putInt(KEY_LANDER_HEIGHT, Integer.valueOf(mLanderHeight));
+//                map.putInt(KEY_GOAL_X, Integer.valueOf(mGoalX));
+//                map.putInt(KEY_GOAL_SPEED, Integer.valueOf(mGoalSpeed));
+//                map.putInt(KEY_GOAL_ANGLE, Integer.valueOf(mGoalAngle));
+//                map.putInt(KEY_GOAL_WIDTH, Integer.valueOf(mGoalWidth));
+//                map.putInt(KEY_WINS, Integer.valueOf(mWinsInARow));
+//                map.putDouble(KEY_FUEL, Double.valueOf(mFuel));
+//            }
+//        }
+//        return map;
+//    }
+//    public synchronized void restoreState(Bundle savedState) {
+//        synchronized (surfaceHolder) {
+////            setState(STATE_PAUSE);
+//            int saveStage = savedState.getInt(KEY_Stage);
+//
+////            mRotating = 0;
+////            mEngineFiring = false;
+////
+////            mDifficulty = savedState.getInt(KEY_DIFFICULTY);
+////            mX = savedState.getDouble(KEY_X);
+////            mY = savedState.getDouble(KEY_Y);
+////            mDX = savedState.getDouble(KEY_DX);
+////            mDY = savedState.getDouble(KEY_DY);
+////            mHeading = savedState.getDouble(KEY_HEADING);
+////
+////            mLanderWidth = savedState.getInt(KEY_LANDER_WIDTH);
+////            mLanderHeight = savedState.getInt(KEY_LANDER_HEIGHT);
+////            mGoalX = savedState.getInt(KEY_GOAL_X);
+////            mGoalSpeed = savedState.getInt(KEY_GOAL_SPEED);
+////            mGoalAngle = savedState.getInt(KEY_GOAL_ANGLE);
+////            mGoalWidth = savedState.getInt(KEY_GOAL_WIDTH);
+////            mWinsInARow = savedState.getInt(KEY_WINS);
+////            mFuel = savedState.getDouble(KEY_FUEL);
+//        }
+//    }
 
 }
 
