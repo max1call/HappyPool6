@@ -5,7 +5,6 @@ package com.example.max.happypool; //сохранение текущ состо�
         import android.os.Message;
         import android.util.AttributeSet;
 
-        import android.util.Log;
 
         import android.view.SurfaceView;
         import android.view.SurfaceHolder;
@@ -33,7 +32,6 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback, Const
 //        tvt1 = (TextView) findViewById(R.id.tv1);
 //        tvt1 = new TextView(context);
 
-        Log.w("Target", "MyView: thread = new MyThread(holder, context...");
         thread = new MyThread(this, holder, context, new Handler() {
             @Override
             public void handleMessage(Message m) {

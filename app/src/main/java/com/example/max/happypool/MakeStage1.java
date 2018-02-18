@@ -24,7 +24,6 @@ class MakeStage1 extends MakeStage{
         makeKuvshinks();
         myThread.setArray(arrayKuvshinka, arrayHeart, arrayHippo);
 
-//        hippo = new Hippo(hashMapImg, hashMapSize, speedHippo, xHippo, yHippo);
         player = new Player(hashMapImg, hashMapSize , 0, 0, speedFly, myThread, arrayHippo);
 
         splash = new Splash(hashMapImg, hashMapSize , 0, 0, player);
@@ -33,6 +32,8 @@ class MakeStage1 extends MakeStage{
         gameOver = new GameOver(hashMapImg, hashMapSize, handler, hashMapSize.get("mCanvasWidth")/2, hashMapSize.get("mCanvasHeight")/2);
         win = new Win(hashMapImg, hashMapSize , hashMapSize.get("mCanvasWidth")/2, hashMapSize.get("mCanvasHeight")/2);
         nextStage = new NextStage(hashMapImg, hashMapSize, myThread, hashMapSize.get("mCanvasWidth")/2, hashMapSize.get("mCanvasHeight")/2);
+        mySound = new MySound(myThread.getContext());
+
 
         putToHash();
         myThread.ObjFromHash(gameObject);
@@ -87,6 +88,7 @@ class MakeStage1 extends MakeStage{
         gameObject.put("win", win);
         gameObject.put("target", target);
         gameObject.put("nextStage", nextStage);
+        gameObject.put("mySound", mySound);
     }
 
 

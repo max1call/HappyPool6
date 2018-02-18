@@ -14,11 +14,11 @@ import java.util.Map;
 class MakeDrawable {
     private Bitmap backgroundImg;
     private Drawable kuvshinkaImg, idleFrogImg, flyFrogImg, bulkImg, hippoImg, kamishImg, heartImg;
-    private Drawable game_overImg, winImg, targetImg, congratImg, stage1Img, stage2Img, stage3Img;
+    private Drawable game_overImg, winImg, targetImg, stage1Img, stage2Img, stage3Img;
     private int mCanvasWidth, mCanvasHeight, bgWidth, bgHeight, heartWidth, heartHeight;
     private int idleFrogWidth, idleFrogHeight, flyFrogWidth, flyFrogHeight, bulkWidth, bulkHeight, kuvshinkaWidth;
     private int kuvshinkaHeight, hippoWidth, hippoHeight, kamishWidth, kamishHeight, targetWidth, targetHeight;
-    private int congratWidth, congratHeight, stage1Width, stage1Height, stage2Width, stage2Height, stage3Width, stage3Height;
+    private int stage1Width, stage1Height, stage2Width, stage2Height, stage3Width, stage3Height;
     private float coefficientScale;
     private int lengthJump;
     private Context context;
@@ -49,7 +49,6 @@ class MakeDrawable {
         hippoImg = context.getResources().getDrawable(R.drawable.begemot);
         heartImg = context.getResources().getDrawable(R.drawable.heart);
         targetImg = context.getResources().getDrawable(R.drawable.target_frog);
-        congratImg = context.getResources().getDrawable(R.drawable.congrat);
         stage1Img = context.getResources().getDrawable(R.drawable.stage1);
         stage2Img = context.getResources().getDrawable(R.drawable.stage2);
         stage3Img = context.getResources().getDrawable(R.drawable.stage3);
@@ -73,8 +72,6 @@ class MakeDrawable {
         heartHeight = heartImg.getIntrinsicHeight();
         targetWidth = targetImg.getIntrinsicWidth();
         targetHeight = targetImg.getIntrinsicHeight();
-        congratWidth = congratImg.getIntrinsicWidth();
-        congratHeight = congratImg.getIntrinsicHeight();
         stage1Width = stage1Img.getIntrinsicWidth();
         stage1Height = stage1Img.getIntrinsicHeight();
         stage2Width = stage2Img.getIntrinsicWidth();
@@ -89,7 +86,6 @@ class MakeDrawable {
         d.getRectSize(rectDisplay);
         mCanvasWidth = rectDisplay.width();
         mCanvasHeight = rectDisplay.height();
-//        Log.w(TAG, "!!!!!!!!!!!!! mCanvasWidth= "+mCanvasWidth+"; mCanvasHeight= "+mCanvasHeight);
         lengthJump = (int) (mCanvasHeight/2.5);
         float coefficientX = (float) bgWidth/mCanvasWidth;
         float coefficientY = (float) bgHeight/mCanvasHeight;
@@ -117,8 +113,6 @@ class MakeDrawable {
             targetWidth = (int) (targetWidth/coefficientScale);
             targetHeight = (int) (targetHeight/coefficientScale);
 
-            congratWidth = (int) (congratWidth/coefficientScale);
-            congratHeight = (int) (congratHeight/coefficientScale);
             stage1Width = (int) (stage1Width/coefficientScale);
             stage1Height = (int) (stage1Height/coefficientScale);
             stage2Width = (int) (stage2Width/coefficientScale);
@@ -141,7 +135,6 @@ class MakeDrawable {
         hashMapImg.put("heartImg", heartImg);
         hashMapImg.put("targetImg", targetImg);
 
-        hashMapImg.put("congratImg", congratImg);
         hashMapImg.put("stage1Img", stage1Img);
         hashMapImg.put("stage2Img", stage2Img);
         hashMapImg.put("stage3Img", stage3Img);
@@ -167,8 +160,6 @@ class MakeDrawable {
         hashMapSize.put("targetWidth",targetWidth);
         hashMapSize.put("targetHeight",targetHeight);
 
-        hashMapSize.put("congratWidth",congratWidth);
-        hashMapSize.put("congratHeight",congratHeight);
         hashMapSize.put("stage1Width",stage1Width);
         hashMapSize.put("stage1Height",stage1Height);
         hashMapSize.put("stage2Width",stage2Width);

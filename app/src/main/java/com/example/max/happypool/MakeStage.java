@@ -32,6 +32,7 @@ class MakeStage {
     int timeUnderWater;
     int lengthJump;
     NextStage nextStage;
+    MySound mySound;
 
     MakeStage(Map<String, Drawable> hashMapImg, Map<String, Integer> hashMapSize, MyThread myThread, Handler handler) {
         this.myThread = myThread;
@@ -39,7 +40,7 @@ class MakeStage {
         this.hashMapSize = hashMapSize;
         lengthJump = hashMapSize.get("lengthJump");
         speedFly= lengthJump/10;
-        timeUnderWater=2000;
+        timeUnderWater=2500;
         speedHippo = lengthJump/70;
 //        makeKuvshinks();
     }

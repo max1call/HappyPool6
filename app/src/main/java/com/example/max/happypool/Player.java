@@ -2,7 +2,6 @@ package com.example.max.happypool;
 
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -18,6 +17,8 @@ public class Player extends PlayObject implements Constants {
     ArrayList<Hippo> arrayHippo;
     Hippo curentHippo;
     Kuvshinka curentKuvsh;
+    MySound mySound;
+
 //    Object object;
 
     Player(Map<String, Drawable> hashMapImg, Map<String, Integer> hashMapSize, int x, int y, int speedFly, MyThread myThread, ArrayList<Hippo> hippo) {
@@ -36,12 +37,15 @@ public class Player extends PlayObject implements Constants {
     public void setState(int curentState) {/////////////////******************////////////////////////////
         this.curentState = curentState;
         if(curentState == STATE_ONKUVSHINKA){
-//            myThread.setState(STATE_RUNING);
+
+            myThread.setState(Constants.STATE_ONKUVSHINKA);
             curentImg = hashMapImg.get("idleFrogImg");
             rect.set(rect.left, rect.top, rect.left + hashMapSize.get("idleFrogWidth"), rect.top + hashMapSize.get("idleFrogHeight"));
             rect.offset(curentKuvsh.getRect().centerX() - rect.centerX(), curentKuvsh.getRect().centerY() - rect.centerY());
         }
         else if (curentState == STATE_MOVE) {
+            mySound.goSoundJump();
+            myThread.setState(Constants.STATE_MOVE);
             curentImg = curentImg = hashMapImg.get("flyFrogImg");
             rect.set(rect.left, rect.top, rect.left + hashMapSize.get("flyFrogWidth"), rect.top + hashMapSize.get("flyFrogHeight"));
         }
@@ -66,7 +70,6 @@ public class Player extends PlayObject implements Constants {
         if (rect.contains((int)x, (int)y) && (curentState == STATE_ONKUVSHINKA || curentState == STATE_ONHIPPO)) {
             readXY = true;
 
-            Log.i("fly", "xStartJump = "+x1+ "; yStartJump = "+y1);
         }
     }
     public void setHeading(float x, float y){
@@ -76,7 +79,6 @@ public class Player extends PlayObject implements Constants {
             radians = Math.acos((y-y1)/Math.sqrt((x-x1)*(x-x1)+(y-y1)*(y-y1)));
             if (x>x1)radians=(-1)*radians;
             heading = (int) (radians*360/(2 * Math.PI));
-            Log.i("fly", "heading = "+heading);
         }
     }
     public void setTouchUp(float x, float y){
@@ -109,6 +111,9 @@ public class Player extends PlayObject implements Constants {
     protected void setCurentKufsh(Kuvshinka k){
             curentKuvsh = k;
     }
-
+    public void setSound(MySound sound){
+        mySound = sound;
+        mySound.goSoundMusic();
+    }
 
 }

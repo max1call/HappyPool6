@@ -55,9 +55,9 @@ public class MyThread extends Thread implements Constants {
     int lengthJump;
     int stage;
     NextStage nextStage;
+    MySound mySound;
 
     MyThread(MyView myView, SurfaceHolder surfaceHolder, Context context, Handler handler) {
-//        Log.i(TAG, "Begin Constructor MyThread");
         this.myView = myView;
         this.surfaceHolder = surfaceHolder;
         this.handler = handler;
@@ -68,6 +68,7 @@ public class MyThread extends Thread implements Constants {
 
         setState(STATE_RUNING);
         setStage(STAGE_1);
+
     }
     public void ObjFromHash(Map<String, Object> gameObject) {
         player = (Player) gameObject.get("player");
@@ -77,6 +78,8 @@ public class MyThread extends Thread implements Constants {
         target = (Target) gameObject.get("target");
         win = (Win) gameObject.get("win");
         nextStage = (NextStage) gameObject.get("nextStage");
+        mySound = (MySound) gameObject.get("mySound");
+
     }
     public void setArray(ArrayList<Kuvshinka> arrayKuvshinka, ArrayList<Heart> arrayHeart, ArrayList<Hippo>arrayHippo){
         this.arrayKuvshinka = arrayKuvshinka;
@@ -101,13 +104,16 @@ public class MyThread extends Thread implements Constants {
         curentState = state;
 
         if(curentState == STATE_RUNING) {
-//            running = true;
+//
+
+        }else if (curentState == STATE_MOVE) {
 
         }else if (curentState == STATE_PAUSE) {
 //            str = context.getResources().getText(R.string.mode_pause);
             running = false;
 
         }else if (curentState == STATE_BULK) {
+            mySound.goSoundBulk();
             now = System.currentTimeMillis();
             splash.setLocatoin();
             countLive--;
@@ -120,14 +126,15 @@ public class MyThread extends Thread implements Constants {
             }
 
         }else if (curentState == STATE_LOSE) {
+            mySound.goSoundFall();
             player.setState(STATE_LOSE);
             for(Hippo h : arrayHippo) {
                 h.setState(STATE_PAUSE);
             }
             mTimer(2000, STATE_LOSE);
 
-
         }else if (curentState == STATE_WIN) {
+            mySound.goSoundWin();
             player.setState(STATE_WIN);
             for(Hippo h : arrayHippo) {
                 h.setState(STATE_PAUSE);
@@ -138,19 +145,22 @@ public class MyThread extends Thread implements Constants {
     }
     protected void setStage(int s){
         stage = s;
-        if (stage == STAGE_1) {
 
+        if (stage == STAGE_1) {
             makeStage1 = new MakeStage1(hashMapImg, hashMapSize, this, handler);
+            player.setSound(mySound);
             setRunning(true);
+            mySound.goSoundMusic();
 //            goNextStage();
             nextStage.setStage(STAGE_1);
             canDrawNextStage = true;
             mTimer(3000, STAGE_1);
+
             player.setCurentKufsh(arrayKuvshinka.get(0));
             player.setState(Constants.STATE_ONKUVSHINKA);
 
         }else if (stage == STAGE_2) {
-//            goNextStage();
+
             nextStage.setStage(STAGE_2);
             canDrawNextStage = true;
             mTimer(2000, STAGE_1);
@@ -185,6 +195,7 @@ public class MyThread extends Thread implements Constants {
 
         for(Kuvshinka k : arrayKuvshinka) {
             if (k.getRect().contains(rectFrog.centerX(), rectFrog.centerY())) {
+                mySound.goSoundShlep();
                 lastKuvshinka = k;
 //                player.setCurentOdj("kuvshinka", k);
 //                rectFrog.offset(k.getRect().centerX()-rectFrog.centerX(), k.getRect().centerY()-rectFrog.centerY());
@@ -197,6 +208,7 @@ public class MyThread extends Thread implements Constants {
         if (!contains) {
             for (Hippo h : arrayHippo) {
                 if (h.getRect().contains(rectFrog.centerX(), rectFrog.centerY())) {
+                    mySound.goSoundShlep();
 //            rectFrog.offset(hippo.getRect().centerX()-rectFrog.centerX(), hippo.getRect().centerY()-rectFrog.centerY());
 //            player.setPositionFrog(rectFrog);
                     player.setState(STATE_ONHIPPO);
@@ -255,6 +267,7 @@ public class MyThread extends Thread implements Constants {
 
 
     public void mTimer(final long delay, final int st){
+        mySound.stopSoundMusic();
         new Thread(new Runnable() {
             public void run() {
                 try {
@@ -268,6 +281,7 @@ public class MyThread extends Thread implements Constants {
                         break;
                     }
                     case STAGE_1: {
+                        mySound.goSoundMusic();
                         canDrawNextStage = false;
                         break;
                     }
@@ -425,5 +439,7 @@ public class MyThread extends Thread implements Constants {
     public void setMainAktivity(MainActivity mainAktivity) {
         m = mainAktivity;
     }
+    public Context getContext(){return context;}
+
 }
 
